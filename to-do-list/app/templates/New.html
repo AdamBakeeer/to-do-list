@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>New Assessment</h1>
+
+
+<form method="POST" action="{{ url_for('New') }}">
+    {{ form.hidden_tag() }}
+    
+    <div>
+        {{ form.title.label }}<br>
+        {{ form.title(size=32) }}
+    </div>
+    
+    <div>
+        {{ form.module_code.label }}<br>
+        {{ form.module_code(size=32) }}
+    </div>
+    
+    <div>
+        {{ form.deadline.label }}<br>
+        {{ form.deadline() }}
+    </div>
+    
+    <div>
+        {{ form.description.label }}<br>
+        {{ form.description(rows=4, cols=32) }}
+    </div>
+    
+    <div>
+        {{ form.is_completed.label }}<br>
+        {{ form.is_completed() }}
+    </div>
+    
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
