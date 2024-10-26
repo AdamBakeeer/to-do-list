@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, TextAreaField
 from wtforms import DateField
 from wtforms.validators import DataRequired
 
-class CalculatorForm(FlaskForm):
-    Title= StringField('Title', validators=[DataRequired()])
-    Code = StringField('Code', validators=[DataRequired()])
+class NewAssessment(FlaskForm):
+    Code = StringField('Module Code', validators=[DataRequired()])
+    Title= StringField('Assessmen Title', validators=[DataRequired()])
     Date = DateField('Date', validators=[DataRequired()])
-    Description = StringField('Description', validators=[DataRequired()])
+    Description = TextAreaField('Description', validators=[DataRequired()])
