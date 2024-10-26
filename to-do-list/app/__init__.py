@@ -1,10 +1,12 @@
 from flask import Flask
-from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
-from app import models
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object('config')
-db = SQLAlchemy(assessment)
+db = SQLAlchemy(app)
 
-from app import views
+migrate = Migrate(app, db)
+
+from app import views, models
+

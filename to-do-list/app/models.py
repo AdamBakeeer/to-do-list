@@ -1,8 +1,8 @@
 from app import db
 
-class Property(db.Model):
+class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     Code = db.Column(db.String(500), index=True, unique=True)
-    start_date = db.Column(db.DateTime)
-    duration = db.Column(db.Integer)
-    rent = db.Column(db.Float)
+    Title = db.Column(db.String(500))
+    Date = db.Column(db.DateTime)
+    Description = db.Column(db.String(500))
