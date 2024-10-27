@@ -17,7 +17,7 @@
     <div class="col-8">
       <h1>New Assesment</h1>
     <form action="" method="post" name="Add_New">
-     
+      {{ form.hidden_tag() }}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-default">{{ form.Code.label.text }}</span>

@@ -13,24 +13,41 @@ def index():
 
 @app.route('/New', methods=['GET', 'POST'])
 def New ():
-    form = NewAssessment()
+    
+    form = NewAssessment(request.form)
+    today = datetime.now().date()
 
     if form.validate_on_submit():
+        print("Form validated successfully!")
+    else:
+        print("Form validation failed:", form.errors)
+        
+
+    if request.method == 'POST' and form.validate_on_submit():
         code = form.Code.data
         title = form.Title.data
         description = form.Description.data
         date = form.Date.data
+
+        if date <= today:
+            flash('Error: The date must be in the future', 'error')
+            return render_template('New.html', title='New', form=form)
+
+        
+        existing_assessment = Assessment.query.filter_by(Code=code).first()
+        if existing_assessment:
+            flash('Error: The code already exists. Please use a unique code.', 'error')
+            return render_template('New.html', title='New', form=form)
+
         
         new_assessment = Assessment(
-            Code=code, Title=title, Date=datetime.strptime(date, '%Y-%m-%d'), Description=description
+            Code=code, Title=title, Date=date, Description=description
         )
 
-        try:
-            db.session.add(new_assessment)
-            db.session.commit()
-            flash('Assessment added successfully!', 'success')
-            return redirect(url_for('index'))  
-        except IntegrityError:
-            db.session.rollback() 
-            flash('Assessment with this code already exists. Please use a different code.', 'error')
+        db.session.add(new_assessment)
+        db.session.commit()
+        flash('Assessment added successfully!', 'success')
+        return redirect(url_for('index'))
+  
+        
     return render_template('New.html', title='New', form=form)
