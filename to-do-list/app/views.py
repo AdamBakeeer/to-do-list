@@ -1,6 +1,6 @@
 from flask import render_template, flash, request, redirect, url_for
 from app import app, db
-from .forms import NewAssessment
+from .forms import NewAssessment, DeleteForm
 from datetime import datetime
 from app.models import Assessment
 from sqlalchemy.exc import IntegrityError
@@ -9,7 +9,27 @@ from sqlalchemy.exc import IntegrityError
 @app.route('/')
 def index():
     
-    return render_template('home.html')
+    rows = Assessment.query.all()
+
+    return render_template('home.html', rows=rows)
+
+@app.route('/current', methods=['GET', 'POST'])
+def current():
+    rows = Assessment.query.all()
+    delete_form = DeleteForm()
+
+    if request.method == 'POST':
+        if delete_form.validate_on_submit():  
+            assessment_id = delete_form.id.data  
+            assessment_delete = Assessment.query.get(assessment_id)
+            if assessment_delete:
+                db.session.delete(assessment_delete)
+                db.session.commit()
+            return redirect(url_for('current'))
+    
+    return render_template('current.html', rows=rows, delete_form=delete_form)
+
+
 
 @app.route('/New', methods=['GET', 'POST'])
 def New ():

@@ -10,10 +10,41 @@
             </ul>
         {% endif %}
     {% endwith %}
-
     
  <h2>In progress:</h2>
-
+ {% for row in rows %}
+ {% if not row.Complete%}
+ 
+     <div class="card" >
+     <div class="card-body">
+         <h1 class="card-title">{{row.Code}}</h1>
+         <h2 class="card-subtitle">{{row.Title}}</h2>
+         <p class="card-text">{{row.Description}}</p>
+         <div class="btn-group" role="group" aria-label="Basic example">
+             <button type="button" class="btn btn-outline-primary mr-2">Complete</button>
+             <button type="button" class="btn btn-outline-danger">Delete</button>
+         </div>
+     </div>
+     </div>
+ {% endif %}
+{% endfor %}
 
  <h2>Completed:</h2>
+
+{% for row in rows %}
+{% if  row.Complete%}
+
+    <div class="card" >
+    <div class="card-body">
+        <h1 class="card-title">{{row.Code}}</h1>
+        <h2 class="card-subtitle">{{row.Title}}</h2>
+        <p class="card-text">{{row.Description}}</p>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-primary mr-2">Un-finish</button>
+            <button type="button" class="btn btn-outline-danger">Delete</button>
+        </div>
+    </div>
+    </div>
+{% endif %}
+{% endfor %}
 {% endblock %}
