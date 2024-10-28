@@ -11,10 +11,11 @@
                 <h1 class="card-title">{{row.Code}}</h1>
                 <h2 class="card-subtitle">{{row.Title}}</h2>
                 <p class="card-text">{{row.Description}}</p>
+                <p class="card-text">{{row.Date.strftime('%Y-%m-%d')}}</p>
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-outline-secondary mr-2">Edit</button>
-                    <button type="button" class="btn btn-outline-primary mr-2">Complete</button>
-                    <button type="button" class="btn btn-outline-danger">Delete</button>
+                    <a href="{{ url_for('edit', id=row.id) }}" class="btn btn-outline-secondary mr-2">Edit</a>
+                    <a href="{{ url_for('complete', id=row.id) }}" class="btn btn-outline-primary mr-2">Mark a Complete</a>
+                    <a href="{{ url_for('delete', id=row.id) }}" class="btn btn-outline-danger mr-2">Delete</a>
                 </div>
             </div>
             </div>

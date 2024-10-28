@@ -11,6 +11,3 @@ class NewAssessment(FlaskForm):
     Complete = BooleanField('Complete')
     submit = SubmitField('Add Assessment')
 
-class DeleteForm(FlaskForm):
-    id = HiddenField("Hidden table row ID")
-    delete = SubmitField("Delete")

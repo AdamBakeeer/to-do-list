@@ -1,9 +1,11 @@
 from flask import render_template, flash, request, redirect, url_for
 from app import app, db
-from .forms import NewAssessment, DeleteForm
+from .forms import NewAssessment
 from datetime import datetime
 from app.models import Assessment
 from sqlalchemy.exc import IntegrityError
+from flask_wtf import FlaskForm
+from wtforms import HiddenField
 
 
 @app.route('/')
@@ -16,18 +18,9 @@ def index():
 @app.route('/current', methods=['GET', 'POST'])
 def current():
     rows = Assessment.query.all()
-    delete_form = DeleteForm()
 
-    if request.method == 'POST':
-        if delete_form.validate_on_submit():  
-            assessment_id = delete_form.id.data  
-            assessment_delete = Assessment.query.get(assessment_id)
-            if assessment_delete:
-                db.session.delete(assessment_delete)
-                db.session.commit()
-            return redirect(url_for('current'))
     
-    return render_template('current.html', rows=rows, delete_form=delete_form)
+    return render_template('current.html', rows=rows)
 
 
 
@@ -54,11 +47,10 @@ def New ():
             return render_template('New.html', title='New', form=form)
 
         
-        existing_assessment = Assessment.query.filter_by(Code=code).first()
+        existing_assessment = Assessment.query.filter_by(Code=code, Title=title).first()
         if existing_assessment:
-            flash('Error: The code already exists. Please use a unique code.', 'error')
+            flash('Error: An Assessment with this code and title already exists', 'error')
             return render_template('New.html', title='New', form=form)
-
         
         new_assessment = Assessment(
             Code=code, Title=title, Date=date, Description=description
@@ -71,3 +63,54 @@ def New ():
   
         
     return render_template('New.html', title='New', form=form)
+
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    assessment = Assessment.query.get_or_404(id)
+    form = NewAssessment(obj=assessment)
+    today = datetime.now().date()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        
+        date = form.Date.data
+
+        if date <= today:
+            flash('Error: The date must be in the future', 'error')
+            return render_template('New.html', title='New', form=form)
+
+        form.populate_obj(assessment)
+        db.session.commit()
+        flash('Assessment updated successfully!', 'success')  
+        return redirect(url_for('index'))
+        
+    return render_template('edit.html', assessment=assessment, form=form)
+
+@app.route('/delete/<int:id>', methods=['GET', 'POST'])
+def delete(id):
+    assessment = Assessment.query.filter_by(id=id).first()
+
+    if assessment:
+        db.session.delete(assessment)
+        db.session.commit()
+        flash('Assessment deleted sucessfully!', 'success')
+        return redirect(url_for('index'))
+    
+    return render_template('current.html, assessment=assessment')
+
+@app.route('/complete/<int:id>', methods=['GET', 'POST'])
+def complete(id):
+    assessment = Assessment.query.get_or_404(id)
+    assessment.Complete = True
+    db.session.commit()
+    flash("Assessment marked as complete!", 'success')
+    return redirect(url_for('index'))
+
+@app.route('/unfinish/<int:id>', methods=['GET', 'POST'])
+def unfinish(id):
+    assessment = Assessment.query.get_or_404(id)
+    assessment.Complete = False
+    db.session.commit()
+    flash("Assessment marked as un-finished!", 'success')
+    return redirect(url_for('index'))
+
+
