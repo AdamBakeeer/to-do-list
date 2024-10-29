@@ -10,10 +10,21 @@ from wtforms import HiddenField
 
 @app.route('/')
 def index():
+    new_assessment = Assessment.query.filter_by(Complete=False).first()
+    old_assessment = Assessment.query.filter_by(Complete=True).first()
+
+    message1 = None
+    if not new_assessment:
+        message1 = "No new assessment available"
+
+    message2 = None
+    if not old_assessment:
+        message2 = "No completed assessment"
+
     
     rows = Assessment.query.all()
 
-    return render_template('home.html', rows=rows)
+    return render_template('home.html', rows=rows, message1=message1, message2=message2)
 
 @app.route('/current', methods=['GET', 'POST'])
 def current():
@@ -73,10 +84,18 @@ def edit(id):
     if request.method == 'POST' and form.validate_on_submit():
         
         date = form.Date.data
+        code = form.Code.data 
+        title = form.Title.data
 
         if date <= today:
             flash('Error: The date must be in the future', 'error')
             return render_template('New.html', title='New', form=form)
+        
+        existing_assessment = Assessment.query.filter_by(Code=code, Title=title).first()
+        if existing_assessment:
+            flash('Error: An Assessment with this code and title already exists', 'error')
+            return render_template('New.html', title='New', form=form)
+        
 
         form.populate_obj(assessment)
         db.session.commit()

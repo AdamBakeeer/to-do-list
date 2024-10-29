@@ -12,6 +12,9 @@
     {% endwith %}
     
  <h2>In progress:</h2>
+ {% if message1 %}
+        <p>{{ message1 }}</p>
+{% endif %}
  
  {% for row in rows %}
  {% if not row.Complete%}
@@ -32,6 +35,9 @@
 {% endfor %}
 
  <h2>Completed:</h2>
+ {% if message2 %}
+        <p>{{ message2 }}</p>
+{% endif %}
 
 {% for row in rows %}
 {% if  row.Complete%}
