@@ -89,12 +89,12 @@ def edit(id):
 
         if date <= today:
             flash('Error: The date must be in the future', 'error')
-            return render_template('New.html', title='New', form=form)
+            return render_template('edit.html', title='New', form=form)
         
-        existing_assessment = Assessment.query.filter_by(Code=code, Title=title).first()
+        existing_assessment = Assessment.query.filter_by(Code=code, Title=title).filter(Assessment.id != id).first()
         if existing_assessment:
             flash('Error: An Assessment with this code and title already exists', 'error')
-            return render_template('New.html', title='New', form=form)
+            return render_template('edit.html', title='New', form=form)
         
 
         form.populate_obj(assessment)
