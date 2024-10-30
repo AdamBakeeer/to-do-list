@@ -1,8 +1,23 @@
 
-
 .subtitle{
     text-align: center;
     text-decoration: underline;
-    padding-bottom: 2.5%;
-    padding-top: 2.5%;
+    padding-bottom: 1%;
+    padding-top: 1%;
+}
+
+.title {
+    padding: 1%;
+}
+
+.alert {
+    align-items: center;
+    text-align: center;
+    width: 25%;
+}
+
+.card {
+    margin:  1%;
+    background-color: rgba(234, 234, 234, 0.392);
+    border: none;
 }
