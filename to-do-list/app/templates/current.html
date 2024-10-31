@@ -1,12 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- Include Bootstrap CSS for styling -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<!-- Include Bootstrap JS for interactive components -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+<!-- Link to custom CSS file for additional styling -->
 <link rel="stylesheet" href="{{ url_for('static', filename='current.css') }}">
+
+<!-- Page title -->
 <h1 class="title">Current Assessments</h1>
 
+<!-- Display a success message if one exists -->
+{% if message %}
+<div class="d-flex justify-content-center">
+    <div class="alert alert-success" role="alert">  
+        {{ message }}
+    </div>
+</div>
+{% endif %}
+
+<!-- Create a grid layout for displaying current assessments -->
 <div class="row justify-content-center">
     {% for row in rows %}
+        <!-- Check if the assessment is not complete -->
         {% if not row.Complete %}
         <div class="col-md-4 mb-4 d-flex justify-content-center">
             <div class="card" style="width: 30rem;">
@@ -16,8 +34,11 @@
                     <p class="card-text">{{ row.Description }}</p>
                     <p class="card-text">Due at: {{ row.Date.strftime('%Y-%m-%d') }}</p>
                     <div class="btn-group" role="group" aria-label="Basic example">
+                        <!-- Link to edit the assessment -->
                         <a href="{{ url_for('edit', id=row.id) }}" class="btn btn-outline-secondary btn-sm me-2">Edit</a>
+                        <!-- Link to mark the assessment as complete -->
                         <a href="{{ url_for('complete', id=row.id) }}" class="btn btn-outline-primary btn-sm me-2">Mark as Complete</a>
+                        <!-- Link to delete the assessment -->
                         <a href="{{ url_for('delete', id=row.id) }}" class="btn btn-outline-danger btn-sm me-2">Delete</a>
                     </div>
                 </div>
@@ -28,4 +49,3 @@
 </div>
 
 {% endblock %}
-

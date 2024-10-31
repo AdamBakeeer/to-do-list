@@ -11,10 +11,17 @@
 }
 
 .alert {
+    display: inline-block;
     align-items: center;
     text-align: center;
-    width: 25%;
+    padding: 1rem; 
+    max-width: 90%; 
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+    border-radius: 0.25rem; 
 }
+
+
 
 .card {
     margin:  1%;
